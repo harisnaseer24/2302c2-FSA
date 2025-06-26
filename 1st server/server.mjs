@@ -6,20 +6,13 @@ import dotenv from "dotenv"
 
 const app = express()
 dotenv.config()
-
 const port = process.env.PORT
-
 // const data = JSON.parse(fs.readFileSync("data.json","utf-8"));
 // let products = data.products;
 
-
-
 //middleware
-
 //body parser
-
 app.use(express.json())
-
 app.use("/",router)
 
 //REST APIs

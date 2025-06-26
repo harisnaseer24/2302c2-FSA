@@ -5,6 +5,8 @@ import mongoose from "mongoose"
 
 
 const app = express()
+//body parser
+app.use(express.json())
 dotenv.config()
 const port = process.env.PORT
 
@@ -16,7 +18,7 @@ async function main() {
   console.log("db connected")
 }
 
-app.use(express.json())
+
 app.use("/",router)
 
 app.listen(port, () => {

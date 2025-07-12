@@ -25,7 +25,8 @@ if(product){
 } 
 } catch (error) {
     res.status(500).json({msg:error})
-}}
+}
+}
 
 //adding a product in db
 const addProduct=async(req,res)=>{
@@ -53,5 +54,53 @@ if(addProduct){
 } catch (error) {
     res.status(500).json({msg:error})
 }}
-const controller= {getAllProducts, addProduct,getProduct}
+
+
+// delete product
+const deleteProduct=async(req,res)=>{
+try {
+    const id= req.params.id;
+    const product= await Product.deleteOne({_id:id});
+if(product){
+    res.json({msg:"Product Deleted Successfully!", products:product}).status(200)
+   
+}else{
+    res.status(400).json({msg:"Failed to delete product"})
+} 
+} catch (error) {
+    res.status(500).json({msg:error})
+}}
+
+
+// edit product
+
+const editProduct=async(req,res)=>{
+
+try {
+  const id= req.params.id;
+    let updatedProduct = {
+        _id:id,
+        title:req.body.title,
+        description:req.body.description,
+        price:req.body.price,
+        discountPercentage:req.body.discountPercentage,
+        rating:req.body.rating,
+        brand:req.body.brand,
+        category:req.body.category,
+        stock:req.body.stock,
+        images:[req.body.images],
+    }
+    const editProduct = await Product.updateOne({_id:id},updatedProduct);
+if(editProduct){
+    res.json({msg:"Product edited successfully!", addedProduct:addProduct})
+    
+}else{
+    res.status(404).json({msg:"Failed to edit product right now, try again"})
+}
+} catch (error) {
+    res.status(500).json({msg:error})
+}}
+
+
+const controller= {getAllProducts, addProduct,getProduct,deleteProduct,editProduct}
 export default controller

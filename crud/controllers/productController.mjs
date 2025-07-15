@@ -102,5 +102,7 @@ if(editProduct){
 }}
 
 
+
+
 const controller= {getAllProducts, addProduct,getProduct,deleteProduct,editProduct}
 export default controller

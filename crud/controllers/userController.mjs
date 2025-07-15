@@ -205,8 +205,33 @@ const sendVerification=async (req,res)=>{
 }
 }
 
+//Change Activation Status of User (Admin route)
 
+let ChangeActivationStatus= async(req, res) => {
+try {
+    const id =req.params.id;
+  let newStatus =req.params.status;
+  console.log(newStatus);
 
+  if(newStatus =="active"){
+    newStatus=true;
+  }else if(newStatus =="deactive"){
+    newStatus=false;
+  }else{
+    newStatus=true
+  }
+const changeActivationStatus= await User.updateOne({_id:id},{isActive:newStatus});
+if(!changeActivationStatus){
+  res.json({msg:"Failed to update status right now."}).status(200);
+  
+}else{
+  res.json({msg:"User status updated successfully."}).status(200);  
+};
+} catch (error) {
+  console.log(error)
+  res.json({msg:error})
+}
+}
 
-const userController= {getAllUsers,Signup,Login,auth,sendVerification}
+const userController= {getAllUsers,Signup,Login,auth,sendVerification, ChangeActivationStatus}
 export default userController

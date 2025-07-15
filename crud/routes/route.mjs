@@ -23,4 +23,6 @@ router
 .get("/users",userController.getAllUsers)
 .get("/users/verify",userController.sendVerification)
 
+.patch("/user/change-activation-status/:id/:status",userController.ChangeActivationStatus)
+
 export default router

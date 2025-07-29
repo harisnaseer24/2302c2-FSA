@@ -1,16 +1,23 @@
 import express from "express"
 import controller from "../controllers/productController.mjs"
 import userController from "../controllers/userController.mjs"
+import { upload } from "../cloudinaryConfig.mjs"
+
 const router = express.Router()
 
 router
 //GET REQUESTs
 
-.get("/",userController.auth,controller.getAllProducts)
+.get("/",controller.getAllProducts)
 .get("/product/:id",controller.getProduct)
 
 //POST REQUESTs
 .post("/addproduct",controller.addProduct)
+//file upload middleware
+.post("/addproductwithimage", upload.single("image")  ,controller.addProductWithImage
+
+
+)
 //DELETE REQUESTs
 .delete("/deleteproduct/:id",controller.deleteProduct)
 

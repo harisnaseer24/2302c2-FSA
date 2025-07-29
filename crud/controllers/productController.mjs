@@ -101,8 +101,35 @@ if(editProduct){
     res.status(500).json({msg:error})
 }}
 
+//file uploading
+//adding a product in db
+const addProductWithImage=async(req,res)=>{
+    
+console.log(req.file.path)
+try {
+    // let {title,description, price} = req.body
+    let newProduct = {
+        title:req.body.title,
+        description:req.body.description,
+        price:req.body.price,
+        discountPercentage:req.body.discountPercentage,
+        rating:req.body.rating,
+        brand:req.body.brand,
+        category:req.body.category,
+        stock:req.body.stock,
+        images:[req.file.path],
+    }
+    const addProduct = await Product.insertOne(newProduct);
+if(addProduct){
+    res.json({msg:"Product added successfully!", addedProduct:addProduct})
+    
+}else{
+    res.status(404).json({msg:"Failed to add product right now, try again"})
+}
+} catch (error) {
+    res.status(500).json({msg:error})
+}}
 
 
-
-const controller= {getAllProducts, addProduct,getProduct,deleteProduct,editProduct}
+const controller= {getAllProducts, addProduct,getProduct,deleteProduct,editProduct,addProductWithImage}
 export default controller

@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
 import Wishlist from "./components/Wishlist";
+import AddProduct from "./pages/AddProduct";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/admin/addproduct" element={<AddProduct />} />
+
         <Route path="/contact" element={<Contact />} />
         <Route path="/signup" element={<Signup />} />    
         <Route path="/login" element={<Login />} />

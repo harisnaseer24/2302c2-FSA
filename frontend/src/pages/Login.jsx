@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // <-- Very important!
 
 import { FaEnvelope, FaLock } from 'react-icons/fa';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate(); // <-- For redirect
@@ -34,7 +35,7 @@ const Login = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
 
@@ -42,12 +43,37 @@ const Login = () => {
       setErrors(validationErrors);
     } else {
       setErrors({});
-      console.log('Login Successful:', formData);
 
-      // Yahan backend ka API lagta normally
-      // Abhi bas directly redirect kar rahe hain
+      //Api call to login
 
-      navigate('/'); // <-- After login, redirect to Home
+      let register= await axios.post('http://localhost:3000/auth/login', formData);
+      if(register.data.msg){
+        console.log(register.data.msg);
+        alert(register.data.msg);
+        const token=register.data.token;
+        const user=register.data.user;
+        console.log(user,token)
+        localStorage.setItem("token",token);
+        localStorage.setItem("role",user.role);
+        localStorage.setItem("user",JSON.stringify(user));
+
+        if (user.role=="admin") {
+          
+          navigate('/admin/addproduct'); // Redirect to login page after successful signup
+        } else {
+          navigate('/'); // Redirect to login page after successful signup
+          
+        }
+      }else if(register.data.error){
+        alert(register.data.error);
+        
+      }
+      else if(register.data.invalidUser){
+        alert(register.data.invalidUser);
+        navigate('/signup'); // Redirect to login page after successful signup
+      }
+
+     // <-- After login, redirect to Home
     }
   };
 

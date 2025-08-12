@@ -40,14 +40,14 @@ if(checkUser){
         
 } else {
     
-    res.status(400).json({msg:"Failed to register user right now..!"})
+    res.status(400).json({error:"Failed to register user right now..!"})
 }
 
 });
    
 }  
 } catch (error) {
-    res.status(500).json({msg:error})
+    res.status(500).json({error:error})
 }
 }
 
@@ -58,7 +58,7 @@ let Login= async(req, res) => {
 const checkUser= await User.findOne({email:req.body.email});
 
 if(!checkUser){
-  res.json({msg:"User does not exists. Please register first."}).status(200);
+  res.json({invalidUser:"User does not exists. Please register first."}).status(401);
 
 }else{
   const match = await bcrypt.compare(req.body.password, checkUser.password);
@@ -71,7 +71,7 @@ if(!checkUser){
     }
 
 else{
-  res.json({msg:"Invalid Credentials."}).status(400);
+  res.json({error:"Invalid Credentials."}).status(400);
 
 }
 };

@@ -1,27 +1,44 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+
+  let Navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
-    password: ''
+    password: '',
+    profilePicture: ''
   });
 
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
+  const handleUsername = (e) => {
     setFormData({ 
       ...formData, 
-      [e.target.name]: e.target.value 
+      username: e.target.value 
+    });
+  };
+  const handleEmail = (e) => {
+    setFormData({ 
+      ...formData, 
+      email: e.target.value 
+    });
+  };
+  const handlePassword = (e) => {
+    setFormData({ 
+      ...formData, 
+      password: e.target.value 
     });
   };
 
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!formData.username.trim()) {
+      newErrors.username = 'username is required';
     }
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
@@ -37,15 +54,27 @@ const Signup = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async  (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
       setErrors({});
-      alert('Signup Successful! 🎉');
-      console.log('Form Data:', formData);
+
+      //Api call to signup
+
+      let register= await axios.post('http://localhost:3000/auth/signup', formData);
+      if(register.data.msg){
+        console.log(register.data.msg);
+        alert(register.data.msg);
+        console.log('Form Data:', formData);
+        Navigate('/login'); // Redirect to login page after successful signup
+      }else{
+        alert("failed to register user right now..!");
+
+      }
+      // alert('Signup Successful! 🎉');
     }
   };
 
@@ -70,7 +99,7 @@ const Signup = () => {
                     className={`form-control ${errors.name ? 'is-invalid' : ''}`} 
                     name="name" 
                     value={formData.name}
-                    onChange={handleChange}
+                    onChange={handleUsername}
                     placeholder="Enter your name"
                   />
                   {errors.name && <div className="invalid-feedback">{errors.name}</div>}
@@ -86,7 +115,7 @@ const Signup = () => {
                     className={`form-control ${errors.email ? 'is-invalid' : ''}`} 
                     name="email" 
                     value={formData.email}
-                    onChange={handleChange}
+                    onChange={handleEmail}
                     placeholder="Enter your email"
                   />
                   {errors.email && <div className="invalid-feedback">{errors.email}</div>}
@@ -102,7 +131,7 @@ const Signup = () => {
                     className={`form-control ${errors.password ? 'is-invalid' : ''}`} 
                     name="password" 
                     value={formData.password}
-                    onChange={handleChange}
+                    onChange={handlePassword}
                     placeholder="Enter password"
                   />
                   {errors.password && <div className="invalid-feedback">{errors.password}</div>}
